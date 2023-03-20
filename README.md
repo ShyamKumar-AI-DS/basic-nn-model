@@ -6,8 +6,6 @@ To develop a neural network regression model for the given dataset.
 
 ## THEORY
 
-Explain the problem statement
-
 ## Neural Network Model
 
 Neural networks consist of simple input/output units called neurons. These units are interconnected and each connection has a weight associated with it. Neural networks are flexible and can be used for both classification and regression. In this article, we will see how neural networks can be applied to regression problems.
@@ -57,67 +55,66 @@ Developed By: Shyam Kumar A
 Register Number: 212221230098
 
 from google.colab import auth
+
 import gspread
+
 from google.auth import default
+
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
 
 auth.authenticate_user()
+
 creds, _ = default()
 gc = gspread.authorize(creds)
 
-worksheet = gc.open('Student_Tables').sheet1
+worksheet = gc.open('DL').sheet1
+
 rows = worksheet.get_all_values()
 
 df = pd.DataFrame(rows[1:], columns=rows[0])
-df = df.astype({'Table':'int'})
-df = df.astype({'Scores':'int'})
-df.head()
-x=df[['Table']].values
-y=df[['Scores']].values
+df1 = df.astype({'ip':'int','op':'int'})
+df1.head()
 
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=0)
+from sklearn.model_selection import train_test_split 
+from sklearn.preprocessing import MinMaxScaler
 
-scaler=MinMaxScaler()
-scaler.fit(x_train)
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
 
-x_t=scaler.transform(x_train)
-x_t
+X = df1[["ip"]].values
+y = df1[["op"]].values
 
-ai=Sequential([
-    Dense(8,activation='relu'),
-    Dense(13,activation='relu'),
+xtrain,xtest,ytrain,ytest = train_test_split(X,y,test_size = 0.33,random_state=33)
+
+Scaler = MinMaxScaler()
+
+Scaler.fit(xtrain)
+
+xtrain1 = Scaler.transform(xtrain)
+
+AiBrain = Sequential([
+    Dense(8,activation = 'relu'),
+    Dense(10,activation = 'relu'),
     Dense(1)
 ])
 
-ai.compile(optimizer='rmsprop',loss='mse')
+AiBrain.compile(optimizer = 'rmsprop',loss = 'mse')
 
-ai.fit(x_t,y_train,epochs=2000)
+AiBrain.fit(xtrain1,ytrain,epochs = 2000)
 
-ai.fit(x_t,y_train,epochs=700)
-
-loss_df=pd.DataFrame(ai.history.history)
+loss_df = pd.DataFrame(AiBrain.history.history)
 
 loss_df.plot()
 
-x_t2=scaler.transform(x_test)
+xtest1 = Scaler.transform(xtest)
 
-ai.evaluate(x_t2,y_test)
+AiBrain.evaluate(xtest1,ytest)
 
-err = rmse()
-preds = ai.predict(x_test)
-err(y_test,preds)
+xn1 = [[10]]
 
-z=[[7]]
+xn1_1 = Scaler.transform(xn1)
 
-z_1=scaler.transform(z)
-
-ai.predict(z_1)
-
+AiBrain.predict(xn1_1)mport default
 
 ```
 
